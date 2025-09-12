@@ -180,15 +180,6 @@ export default function App() {
         </View>
       )}
 
-      {transcript && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Transcript</Text>
-          <Text style={styles.transcriptText} selectable={true}>
-            {transcript}
-          </Text>
-        </View>
-      )}
-
       {hasResults && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>AI Summary</Text>
@@ -217,6 +208,15 @@ export default function App() {
               ))}
             </>
           )}
+        </View>
+      )}
+
+      {transcript && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Transcript</Text>
+          <Text style={styles.transcriptText} selectable={true}>
+            {transcript}
+          </Text>
         </View>
       )}
     </ScrollView>
