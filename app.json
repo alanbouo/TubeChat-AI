@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "YouTube Transcript Tool",
+    "slug": "youtubetranscriptapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "youtubetranscriptapp",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.youtubetranscriptapp.ios",
+      "buildNumber": "1.0.0",
+      "requireFullScreen": false,
+      "isTabletOnly": false
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.youtubetranscriptapp.android",
+      "versionCode": 1,
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "primaryColor": "#007AFF",
+    "description": "Extract transcripts from YouTube videos and get AI-powered summaries, keywords, and actionable insights. Perfect for learning, research, and productivity.",
+    "githubUrl": "https://github.com/yourusername/youtubetranscriptapp",
+    "notification": {
+      "iosDisplayInForeground": true
+    },
+    "plugins": [
+      "expo-font",
+      "expo-notifications"
+    ]
+  }
+}
