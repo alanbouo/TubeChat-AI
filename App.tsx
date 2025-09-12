@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
+import * as Clipboard from 'expo-clipboard';
 
 function extractVideoId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -29,6 +30,11 @@ export default function App() {
   const [hasResults, setHasResults] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleCopy = async () => {
+    await Clipboard.setStringAsync(transcript);
+    Alert.alert('Copied', 'Transcript copied to clipboard!');
+  };
 
   const handleSubmit = async () => {
     setError('');
@@ -168,9 +174,14 @@ export default function App() {
         onPress={handleSubmit}
         disabled={loading}
       >
-        <Text style={styles.buttonText}>
-          {loading ? 'Processing...' : 'Get Transcript & Summary'}
-        </Text>
+        {loading ? (
+          <View style={styles.buttonContent}>
+            <ActivityIndicator size="small" color="#fff" />
+            <Text style={styles.buttonText}>Traitement en cours...</Text>
+          </View>
+        ) : (
+          <Text style={styles.buttonText}>Get Transcript & Summary</Text>
+        )}
       </TouchableOpacity>
 
       {loading && (
@@ -217,6 +228,9 @@ export default function App() {
           <Text style={styles.transcriptText} selectable={true}>
             {transcript}
           </Text>
+          <TouchableOpacity onPress={handleCopy} style={styles.copyButton}>
+            <Text style={styles.copyButtonText}>Copy Transcript</Text>
+          </TouchableOpacity>
         </View>
       )}
     </ScrollView>
@@ -281,6 +295,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   loadingContainer: {
     alignItems: 'center',
     marginBottom: 20,
@@ -332,5 +350,18 @@ const styles = StyleSheet.create({
     color: '#666',
     lineHeight: 24,
     paddingLeft: 10,
+  },
+  copyButton: {
+    marginTop: 15,
+    backgroundColor: '#007AFF',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
+  copyButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
