@@ -20,6 +20,7 @@ function extractVideoId(url: string): string | null {
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const TRUNCATE_LENGTH = 500;
 
 export default function App() {
   const [url, setUrl] = useState('');
@@ -31,6 +32,7 @@ export default function App() {
   const [hasResults, setHasResults] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isTranscriptExpanded, setIsTranscriptExpanded] = useState(false);
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync(transcript);
@@ -238,8 +240,16 @@ export default function App() {
             <Text style={styles.sectionTitle}>Transcript</Text>
           </View>
           <Text style={styles.transcriptText} selectable={true}>
-            {transcript}
+            {isTranscriptExpanded ? transcript : transcript.substring(0, TRUNCATE_LENGTH) + (transcript.length > TRUNCATE_LENGTH ? '...' : '')}
           </Text>
+          {transcript.length > TRUNCATE_LENGTH && (
+            <TouchableOpacity onPress={() => setIsTranscriptExpanded(!isTranscriptExpanded)} style={styles.expandButton}>
+              <View style={styles.expandButtonContent}>
+                <MaterialIcons name={isTranscriptExpanded ? "expand-less" : "expand-more"} size={24} color="#007AFF" />
+                <Text style={styles.expandButtonText}>{isTranscriptExpanded ? "Masquer" : "Voir plus"}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity onPress={handleCopy} style={styles.copyButton}>
             <Text style={styles.copyButtonText}>Copy Transcript</Text>
           </TouchableOpacity>
@@ -393,5 +403,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 15,
     marginLeft: 10,
+  },
+  expandButton: {
+    marginVertical: 10,
+    alignSelf: 'center',
+  },
+  expandButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  expandButtonText: {
+    fontSize: 16,
+    color: '#007AFF',
+    marginLeft: 8,
   },
 });
