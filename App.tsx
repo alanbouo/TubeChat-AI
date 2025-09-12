@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
+import * as Clipboard from 'expo-clipboard';
+import { MaterialIcons } from '@expo/vector-icons';
 
 function extractVideoId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -29,6 +31,11 @@ export default function App() {
   const [hasResults, setHasResults] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleCopy = async () => {
+    await Clipboard.setStringAsync(transcript);
+    Alert.alert('Copied', 'Transcript copied to clipboard!');
+  };
 
   const handleSubmit = async () => {
     setError('');
@@ -182,25 +189,38 @@ export default function App() {
 
       {hasResults && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>AI Summary</Text>
+          <View style={styles.sectionHeader}>
+            <MaterialIcons name="lightbulb" size={24} color="#007AFF" />
+            <Text style={styles.sectionTitle}>AI Summary</Text>
+          </View>
           <Text style={styles.sectionText}>
             {summary}
           </Text>
 
+          <View style={styles.divider} />
+
           {keywords.length > 0 && (
             <>
-              <Text style={styles.sectionSubtitle}>Keywords:</Text>
+              <View style={styles.subHeader}>
+                <MaterialIcons name="local-offer" size={20} color="#007AFF" />
+                <Text style={styles.subTitle}>Keywords:</Text>
+              </View>
               {keywords.map((keyword, index) => (
                 <Text key={index} style={styles.listItem}>
                   • {keyword}
                 </Text>
               ))}
+
+              {actions.length > 0 && <View style={styles.divider} />}
             </>
           )}
 
           {actions.length > 0 && (
             <>
-              <Text style={styles.sectionSubtitle}>Suggested Actions:</Text>
+              <View style={styles.subHeader}>
+                <MaterialIcons name="list-alt" size={20} color="#007AFF" />
+                <Text style={styles.subTitle}>Suggested Actions:</Text>
+              </View>
               {actions.map((action, index) => (
                 <Text key={index} style={styles.listItem}>
                   • {action}
@@ -213,10 +233,16 @@ export default function App() {
 
       {transcript && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Transcript</Text>
+          <View style={styles.sectionHeader}>
+            <MaterialIcons name="description" size={24} color="#007AFF" />
+            <Text style={styles.sectionTitle}>Transcript</Text>
+          </View>
           <Text style={styles.transcriptText} selectable={true}>
             {transcript}
           </Text>
+          <TouchableOpacity onPress={handleCopy} style={styles.copyButton}>
+            <Text style={styles.copyButtonText}>Copy Transcript</Text>
+          </TouchableOpacity>
         </View>
       )}
     </ScrollView>
@@ -308,7 +334,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 15,
+    marginLeft: 10,
   },
   sectionSubtitle: {
     fontSize: 18,
@@ -332,5 +358,40 @@ const styles = StyleSheet.create({
     color: '#666',
     lineHeight: 24,
     paddingLeft: 10,
+  },
+  copyButton: {
+    marginTop: 15,
+    backgroundColor: '#007AFF',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
+  copyButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#ddd',
+    marginVertical: 10,
+  },
+  subHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  subTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    marginTop: 10,
+    marginBottom: 15,
+    marginLeft: 10,
   },
 });
