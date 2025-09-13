@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useWindowDimensions } from 'react-native';
 import {
   View,
   Text,
@@ -13,6 +14,7 @@ import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
 import * as Clipboard from 'expo-clipboard';
 import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function extractVideoId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -33,7 +35,7 @@ export default function App() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isTranscriptExpanded, setIsTranscriptExpanded] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+
   const [urlValid, setUrlValid] = useState(false);
 
   const validateUrl = (url: string) => {
@@ -172,33 +174,26 @@ export default function App() {
     }
   };
 
+  const { width } = useWindowDimensions();
+  const scale = Math.min(width / 375, 1.5);
+  const titleFontSize = Math.max(20, 24 * scale);
+  const subtitleFontSize = Math.max(14, 16 * scale);
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <View style={styles.mainContainer}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <StatusBar style="auto" />
 
       <View style={styles.headerContainer}>
-        <View style={styles.headerTitles}>
-          <Text style={styles.title}>YouTube Transcript Tool</Text>
-          <Text style={styles.subtitle}>
-            Paste a YouTube URL to get transcript and AI summary
-          </Text>
-        </View>
-        <TouchableOpacity onPress={() => setShowMenu(!showMenu)}>
-          <MaterialIcons name="menu" size={24} color="#007AFF" />
-        </TouchableOpacity>
-        {showMenu && (
-          <View style={styles.menuDropdown}>
-            <TouchableOpacity style={styles.menuItem} onPress={() => { setShowMenu(false); Alert.alert('Historique', 'Ouverture de l\'historique ...'); }}>
-              <Text style={styles.menuItemText}>Historique</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => { setShowMenu(false); Alert.alert('Paramètres', 'Ouverture des paramètres ...'); }}>
-              <Text style={styles.menuItemText}>Paramètres</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => { setShowMenu(false); Alert.alert('Aide', 'Ouverture de l\'aide ...'); }}>
-              <Text style={styles.menuItemText}>Aide</Text>
-            </TouchableOpacity>
+        <View style={styles.logoContainer}>
+          <MaterialCommunityIcons name="youtube" size={40} color="red" />
+          <View style={styles.brandTitles}>
+            <Text style={styles.title}>YouTube Transcript Tool</Text>
+            <Text style={styles.subtitle}>
+              Paste a YouTube URL to get transcript and AI summary
+            </Text>
           </View>
-        )}
+        </View>
       </View>
 
       <View style={styles.inputContainer}>
@@ -214,7 +209,7 @@ export default function App() {
             autoCorrect={false}
           />
           <TouchableOpacity onPress={pasteFromClipboard} style={styles.pasteButton}>
-            <Text style={styles.pasteButtonText}>Coller</Text>
+            <Text style={styles.pasteButtonText}>Paste</Text>
           </TouchableOpacity>
         </View>
         {url.trim() && (
@@ -315,6 +310,25 @@ export default function App() {
         </View>
       )}
     </ScrollView>
+    <View style={styles.footer}>
+      <TouchableOpacity style={styles.footerButton} onPress={() => Alert.alert('Under Development', 'This feature is coming soon!')}>
+        <MaterialIcons name="chat" size={24} color="#fff" />
+        <Text style={styles.footerButtonText}>Chat</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.footerButton} onPress={() => Alert.alert('Under Development', 'This feature is coming soon!')}>
+        <MaterialIcons name="history" size={24} color="#fff" />
+        <Text style={styles.footerButtonText}>History</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.footerButton} onPress={() => Alert.alert('Under Development', 'This feature is coming soon!')}>
+        <MaterialIcons name="settings" size={24} color="#fff" />
+        <Text style={styles.footerButtonText}>Settings</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.footerButton} onPress={() => Alert.alert('Under Development', 'This feature is coming soon!')}>
+        <MaterialIcons name="help-outline" size={24} color="#fff" />
+        <Text style={styles.footerButtonText}>Help</Text>
+      </TouchableOpacity>
+    </View>
+    </View>
   );
 }
 
@@ -328,8 +342,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     alignItems: 'center',
     marginBottom: 30,
   },
@@ -540,5 +553,35 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginLeft: 5,
+  },
+  mainContainer: {
+    flex: 1,
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  brandTitles: {
+    marginLeft: 10,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 60,
+    backgroundColor: '#007AFF',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  footerButton: {
+    alignItems: 'center',
+  },
+  footerButtonText: {
+    fontSize: 12,
+    color: '#fff',
   },
 });
