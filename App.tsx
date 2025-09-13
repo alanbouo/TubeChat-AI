@@ -33,6 +33,7 @@ export default function App() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isTranscriptExpanded, setIsTranscriptExpanded] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync(transcript);
@@ -153,10 +154,28 @@ export default function App() {
       <StatusBar style="auto" />
 
       <View style={styles.headerContainer}>
-        <Text style={styles.title}>YouTube Transcript Tool</Text>
-        <Text style={styles.subtitle}>
-          Paste a YouTube URL to get transcript and AI summary
-        </Text>
+        <View style={styles.headerTitles}>
+          <Text style={styles.title}>YouTube Transcript Tool</Text>
+          <Text style={styles.subtitle}>
+            Paste a YouTube URL to get transcript and AI summary
+          </Text>
+        </View>
+        <TouchableOpacity onPress={() => setShowMenu(!showMenu)}>
+          <MaterialIcons name="menu" size={24} color="#007AFF" />
+        </TouchableOpacity>
+        {showMenu && (
+          <View style={styles.menuDropdown}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => { setShowMenu(false); Alert.alert('Historique', 'Ouverture de l\'historique ...'); }}>
+              <Text style={styles.menuItemText}>Historique</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem} onPress={() => { setShowMenu(false); Alert.alert('Paramètres', 'Ouverture des paramètres ...'); }}>
+              <Text style={styles.menuItemText}>Paramètres</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem} onPress={() => { setShowMenu(false); Alert.alert('Aide', 'Ouverture de l\'aide ...'); }}>
+              <Text style={styles.menuItemText}>Aide</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <View style={styles.inputContainer}>
@@ -269,8 +288,14 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
+  },
+  headerTitles: {
+    flex: 1,
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
@@ -416,5 +441,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#007AFF',
     marginLeft: 8,
+  },
+  menuDropdown: {
+    position: 'absolute',
+    top: 40,
+    right: 0,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+    padding: 10,
+    zIndex: 999,
+  },
+  menuItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  menuItemText: {
+    fontSize: 16,
+    color: '#333',
   },
 });
