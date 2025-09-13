@@ -34,6 +34,29 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [isTranscriptExpanded, setIsTranscriptExpanded] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [urlValid, setUrlValid] = useState(false);
+
+  const validateUrl = (url: string) => {
+    if (!url.trim()) return false;
+    return url.includes('youtube.com/watch') || url.includes('youtu.be/');
+  };
+
+  const handleChangeText = (value: string) => {
+    setUrl(value);
+    setUrlValid(validateUrl(value));
+  };
+
+  const pasteFromClipboard = async () => {
+    try {
+      const text = await Clipboard.getStringAsync();
+      if (text) {
+        setUrl(text);
+        setUrlValid(validateUrl(text));
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Unable to paste');
+    }
+  };
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync(transcript);
@@ -180,15 +203,32 @@ export default function App() {
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>YouTube URL</Text>
-        <TextInput
-          style={styles.textInput}
-          value={url}
-          onChangeText={setUrl}
-          placeholder="https://www.youtube.com/watch?v=..."
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.textInputExpanded}
+            value={url}
+            onChangeText={handleChangeText}
+            placeholder="https://www.youtube.com/watch?v=..."
+            placeholderTextColor="#999"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <TouchableOpacity onPress={pasteFromClipboard} style={styles.pasteButton}>
+            <Text style={styles.pasteButtonText}>Coller</Text>
+          </TouchableOpacity>
+        </View>
+        {url.trim() && (
+          <View style={styles.validationContainer}>
+            <MaterialIcons
+              name={urlValid ? 'check-circle' : 'error-outline'}
+              size={20}
+              color={urlValid ? 'green' : 'red'}
+            />
+            <Text style={styles.validationText}>
+              {urlValid ? 'URL valide' : 'URL invalide'}
+            </Text>
+          </View>
+        )}
       </View>
 
       <TouchableOpacity
@@ -463,5 +503,42 @@ const styles = StyleSheet.create({
   menuItemText: {
     fontSize: 16,
     color: '#333',
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textInputExpanded: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    backgroundColor: '#fff',
+  },
+  pasteButton: {
+    marginLeft: 10,
+    backgroundColor: '#007AFF',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  pasteButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  validationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  validationText: {
+    fontSize: 14,
+    color: '#666',
+    marginLeft: 5,
   },
 });
