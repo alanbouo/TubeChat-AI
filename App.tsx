@@ -188,7 +188,7 @@ export default function App() {
         <View style={styles.logoContainer}>
           <MaterialCommunityIcons name="youtube" size={40} color="red" />
           <View style={styles.brandTitles}>
-            <Text style={styles.title}>YouTube Transcript Tool</Text>
+            <Text style={styles.title}>ChatTube AI</Text>
             <Text style={styles.subtitle}>
               Paste a YouTube URL to get transcript and AI summary
             </Text>
