@@ -40,7 +40,7 @@ export default function App() {
 
   const validateUrl = (url: string) => {
     if (!url.trim()) return false;
-    return url.includes('youtube.com/watch') || url.includes('youtu.be/');
+    return extractVideoId(url) !== null;
   };
 
   const handleChangeText = (value: string) => {
@@ -194,6 +194,20 @@ export default function App() {
             </Text>
           </View>
         </View>
+        <TouchableOpacity style={styles.resetButton} onPress={() => {
+          setUrl('');
+          setTranscript('');
+          setSummary('');
+          setKeywords([]);
+          setActions([]);
+          setHasResults(false);
+          setUrlValid(false);
+          setError('');
+          setIsTranscriptExpanded(false);
+          setLoading(false);
+        }}>
+          <MaterialIcons name="refresh" size={24} color="#007AFF" />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.inputContainer}>
@@ -342,7 +356,8 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   headerContainer: {
-    flexDirection: 'column',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
   },
