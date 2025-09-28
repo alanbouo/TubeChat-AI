@@ -93,6 +93,8 @@ export default function App() {
       console.log('Fetching transcript for video:', videoId);
       const transcriptRes = await axios.post('https://yt.alanbouo.com/transcript', {
         video_id: videoId
+      }, {
+        timeout: 20000 // 20 seconds timeout
       });
 
       const transcriptData = transcriptRes.data.transcript;
@@ -103,6 +105,8 @@ export default function App() {
       const analyzeRes = await axios.post('https://yt-summary.alanbouo.com/analyze', {
         video_id: videoId,
         transcript: transcriptData
+      }, {
+        timeout: 20000 // 20 seconds timeout
       });
 
       const analyzeToken = analyzeRes.data.token;
@@ -121,7 +125,8 @@ export default function App() {
       // Try the result endpoint first
       try {
         resultRes = await axios.get('https://yt-summary.alanbouo.com/result', {
-          params: { token: analyzeToken }
+          params: { token: analyzeToken },
+          timeout: 20000 // 20 seconds timeout
         });
       } catch (resultErr: any) {
         console.log('Result endpoint failed, trying alternative endpoints...');
@@ -136,7 +141,8 @@ export default function App() {
         for (const endpoint of endpoints) {
           try {
             resultRes = await axios.get(endpoint, {
-              params: { token: analyzeToken }
+              params: { token: analyzeToken },
+              timeout: 20000 // 20 seconds timeout
             });
             console.log(`Success with endpoint: ${endpoint}`);
             break;
