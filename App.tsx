@@ -14,7 +14,8 @@ import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
 import * as Clipboard from 'expo-clipboard';
 import { MaterialIcons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Image } from 'react-native';
+import * as ImageAssets from './assets/icon.png';
 
 function extractVideoId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -192,7 +193,11 @@ export default function App() {
 
       <View style={styles.headerContainer}>
         <View style={styles.logoContainer}>
-          <MaterialCommunityIcons name="youtube" size={40} color="red" />
+          <Image 
+            source={require('./assets/icon.png')} 
+            style={{ width: 40, height: 40, borderRadius: 8 }}
+            resizeMode="contain"
+          />
           <View style={styles.brandTitles}>
             <Text style={styles.title}>TubeChat AI</Text>
             <Text style={styles.subtitle}>
@@ -240,7 +245,7 @@ export default function App() {
               color={urlValid ? 'green' : 'red'}
             />
             <Text style={styles.validationText}>
-              {urlValid ? 'URL valide' : 'URL invalide'}
+              {urlValid ? 'Valid URL' : 'Invalid URL'}
             </Text>
           </View>
         )}
