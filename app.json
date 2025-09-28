@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "YouTube Transcript Tool",
-    "slug": "youtubetranscriptapp",
+    "name": "TubeChat AI",
+    "slug": "tubechatai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "youtubetranscriptapp",
+    "scheme": "tubechatai",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,17 +17,20 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.youtubetranscriptapp.ios",
+      "bundleIdentifier": "com.alanbouo.tubechatai.ios",
       "buildNumber": "1.0.0",
       "requireFullScreen": false,
-      "isTabletOnly": false
+      "isTabletOnly": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.youtubetranscriptapp.android",
+      "package": "com.alanbouo.tubechatai.android",
       "versionCode": 1,
       "permissions": [
         "INTERNET",
@@ -39,13 +42,18 @@
     },
     "primaryColor": "#007AFF",
     "description": "Extract transcripts from YouTube videos and get AI-powered summaries, keywords, and actionable insights. Perfect for learning, research, and productivity.",
-    "githubUrl": "https://github.com/yourusername/youtubetranscriptapp",
+    "githubUrl": "https://github.com/alan-bouo/chaTubeApp",
     "notification": {
       "iosDisplayInForeground": true
     },
     "plugins": [
       "expo-font",
       "expo-notifications"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f5dc9abb-52e2-477b-ae33-41d5b3f32a0c"
+      }
+    }
   }
 }
