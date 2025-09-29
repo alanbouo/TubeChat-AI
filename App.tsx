@@ -15,7 +15,6 @@ import { StatusBar } from 'expo-status-bar';
 import * as Clipboard from 'expo-clipboard';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'react-native';
-import * as ImageAssets from './assets/icon.png';
 
 function extractVideoId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -117,7 +116,7 @@ export default function App() {
       }
 
       // Wait 5 seconds instead of 10 for mobile experience
-      await delay(5000);
+      await delay(20000);
 
       // 3. Get results with token (try multiple endpoints if needed)
       console.log('Fetching results...');
@@ -194,18 +193,24 @@ export default function App() {
       <View style={styles.headerContainer}>
         <View style={styles.logoContainer}>
           <Image 
-            source={require('./assets/icon.png')} 
-            style={{ width: 40, height: 40, borderRadius: 8 }}
+            source={require('./assets/adaptive-icon.png')} 
+            style={{ 
+              width: 60, 
+              height: 60, 
+              borderRadius: 8, 
+              backgroundColor: '#f5f5f5',
+              marginLeft: 20  // Added left margin for better visibility
+            }}
             resizeMode="contain"
           />
-          <View style={styles.brandTitles}>
+          <View style={[styles.brandTitles, { flexShrink: 1 }]}>
             <Text style={styles.title}>TubeChat AI</Text>
             <Text style={styles.subtitle}>
               Paste a YouTube URL to get transcript and AI summary
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.resetButton} onPress={() => {
+        <TouchableOpacity style={[styles.resetButton, { marginLeft: 10 }]} onPress={() => {
           setUrl('');
           setTranscript('');
           setSummary('');
@@ -371,6 +376,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
+    paddingRight: 10, // Add padding to the right of the header
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 10, // Add margin to the right of the logo container
+  },
+  brandTitles: {
+    flex: 1,
+    marginLeft: 10, // Add some space between the logo and text
   },
   headerTitles: {
     flex: 1,
